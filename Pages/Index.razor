@@ -1,0 +1,76 @@
+﻿@page "/"
+@page "/{search}"
+
+
+@{
+    <div id="results">
+        @for (int i = 0; i < posterURLs.Count; i++)
+        {
+            if (posterURLs[i] != null)
+            {
+                string imagePath = "https://image.tmdb.org/t/p/w500/" + posterURLs[i];
+                if (posterURLs[i].Length > 4)
+                {
+                    string movieID = movieIDs[i];
+                    string overview = overviews[i];
+                    <ShowPoster imagePath=@imagePath movieID=@movieID overview=@overview />
+                }
+            }
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string search { get; set; } = "default";
+    private List<string> posterURLs = new List<string>();
+    private List<string> overviews = new List<string>();
+    private List<string> movieIDs = new List<string>();
+    protected override async Task OnInitializedAsync()
+    {
+        //#if DEBUG
+        //    await Task.Delay(5000);
+        //#endif
+        await Program.fetch.GetTrends();
+        posterURLs.Clear();
+        overviews.Clear();
+        movieIDs.Clear();
+        foreach(Trend trend in Program.trendSet.results)
+        {
+            posterURLs.Add(trend.poster_path);
+            overviews.Add(trend.overview);
+            movieIDs.Add(trend.id.ToString());
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (search == "default" || search == null)
+        {
+            await Program.fetch.GetTrends();
+            posterURLs.Clear();
+            overviews.Clear();
+            movieIDs.Clear();
+            foreach (Trend trend in Program.trendSet.results)
+            {
+                posterURLs.Add(trend.poster_path);
+                overviews.Add(trend.overview);
+                movieIDs.Add(trend.id.ToString());
+            }
+        }
+        else
+        {
+            await Program.fetch.Search(search);
+            posterURLs.Clear();
+            overviews.Clear();
+            movieIDs.Clear();
+            foreach (Poster poster in Program.posterSet.results)
+            {
+                posterURLs.Add(poster.poster_path);
+                overviews.Add(poster.overview);
+                movieIDs.Add(poster.id.ToString());
+            }
+            search = "default";
+        }
+    }
+}

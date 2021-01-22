@@ -1,0 +1,17 @@
+<div id="searchForm">
+    <form @onsubmit=Search>
+        <input id="searchBox" type="text" @bind="search" placeholder="Search"/>
+        <button class="btn btn-default searchBtn">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
+
+@code {
+    private string search;
+    private void Search()
+    {
+        NavManager.NavigateTo("/" + search);
+        search = "";
+    }
+}

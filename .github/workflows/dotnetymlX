@@ -1,0 +1,31 @@
+name: BlazorOnNetlify #your workflow name
+on: [push] #on push to your branch run this workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    # sets up .NET Core SDK 5.0.101
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1.7.2
+      with:
+        dotnet-version: 5.0.101
+    
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+    
+    - name: Publish Blazor webassembly using dotnet 
+    #create Blazor WebAssembly dist output folder in the project directory
+      run: dotnet publish -c Release --no-build -o ./
+    
+    - name: Publish generated Blazor webassembly to Netlify
+      uses: netlify/actions/cli@master #uses Netlify Cli actions
+      env: # these environment variables are added in github secrets
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      with:
+          args: deploy --dir=dist --prod #push dist folder to Netlify
+          secrets: '["NETLIFY_SITE_ID", "NETLIFY_AUTH_TOKEN"]' 

@@ -1,0 +1,56 @@
+@page "/TvDetails/{MovieID}"
+
+@{
+    <div id="results">
+        @for (int i = 0; i < posterURLs.Count; i++)
+        {
+            if (posterURLs[i] != null)
+            {
+                string imagePath = "https://image.tmdb.org/t/p/w500/" + posterURLs[i];
+                if (posterURLs[i].Length > 4)
+                {
+                    int num = i;
+                    <div class="thumb" style="background: url(@imagePath); background-size: cover;" title="@seasonNames[i]">
+                        <input type="image" class="thumbButton" @onclick="() => SeasonDetails(seasonNumbers[num])" />
+                    </div>
+                }
+            }
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string MovieID { get; set; }
+    private List<string> posterURLs = new List<string>();
+    private List<string> overviews = new List<string>();
+    private List<string> seasonIDs = new List<string>();
+    private List<string> seasonNames = new List<string>();
+    private List<string> seasonNumbers = new List<string>();
+    protected override async Task OnParametersSetAsync()
+    {
+        //#if DEBUG
+        //   await Task.Delay(2000);
+        //#endif
+        await Program.fetch.GetDetails(MovieID);
+        posterURLs.Clear();
+        overviews.Clear();
+        seasonIDs.Clear();
+        seasonNames.Clear();
+        seasonNumbers.Clear();
+        foreach(Season season in Program.tv.seasons)
+        {
+            posterURLs.Add(season.poster_path);
+            overviews.Add(season.overview);
+            seasonIDs.Add(season.id.ToString());
+            seasonNames.Add(season.name);
+            seasonNumbers.Add(season.season_number.ToString());
+        }
+    }
+
+    private void SeasonDetails(string seasonNum)
+    {
+        NavManager.NavigateTo("/SeasonDetail/" + MovieID + "/" + seasonNum);
+    }
+}
+

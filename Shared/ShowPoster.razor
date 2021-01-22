@@ -1,0 +1,23 @@
+
+<div class="thumb" style="background: url(@imagePath); background-size: cover;" title="@overview">
+    <input type="image" class="thumbButton" @onclick="() => Details(movieID)" />
+</div>
+
+@code {
+    [Parameter]
+    public string imagePath { get; set; }
+    [Parameter]
+    public string movieID { get; set; }
+    [Parameter]
+    public string overview { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    public async Task Details(string id)
+    {
+        movieID = id;
+        await Program.fetch.GetDetails(movieID);
+        NavManager.NavigateTo("/TvDetails/" + movieID);
+    }
+}

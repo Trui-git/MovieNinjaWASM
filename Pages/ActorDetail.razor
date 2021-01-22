@@ -1,0 +1,156 @@
+@page "/ActorDetail/{castID}"
+@{
+    @if(profilePath != null) 
+    {
+        <div id="actorFrame">
+            <div id="actorStats" style="background-image: url('https://image.tmdb.org/t/p/w500/@profilePath');background-size: 100% 100%;"></div>
+            <div id="actorBio">
+                <h2>@name</h2>
+                <h3>Biography</h3>
+                <p class="bio">@biography</p>
+            </div>
+        </div>
+    }
+    else{
+        <div id="actorFrame">
+        <div id="actorStats" style="background-image: url('./assets/images/no_image');background-size: 100% 100%;"></div>
+            <div id="actorBio">
+                <h2>@name</h2>
+                <h3>Biography</h3>
+                <p class="bio">@biography</p>
+            </div>
+        </div>
+    }
+    <div id="actorsInfo">
+        <h3 style="margin-bottom: 30px; font-weight:bold">Personal Info</h3>
+        <h5>Known For: @department</h5>
+        @if (gender == 1)
+        {
+            <h5>Gender: Female </h5>
+        }
+        else
+        {
+            <h5>Gender: Male </h5>
+        }
+        <h5>Popularty: @popularity</h5>
+        @if( birthday != "" )
+        {
+            <h5>Birthday: @birthday</h5>
+        }
+        else
+        {
+            <h5>Birthday: Unknown</h5>
+        }
+        @if( placeBirth != "" )
+        {
+            <h5>Place of Birth: @placeBirth</h5>
+        }
+        else
+        {
+            <h5>Place of Birth: Unknown</h5>
+        }
+        @if( homepage != "" )
+        {
+            <h5>Official Site: <a href= "@homepage" style="color:rgb(27, 226, 226)">Link to page</a> </h5>
+        }
+        else
+        {            
+            <h5>Official Site: Unknown</h5>
+        }
+        @if( imdb != "" )
+        {
+            <h5>IMDB Site: <a href="https://www.imdb.com/name/@imdb/" style="color:rgb(27, 226, 226)">Link to IMDB</a></h5>
+        }
+        else
+        {
+            <h5>IMDB Site: Unknown</h5>
+        }
+    </div>
+
+    <div id="gallery">    
+        <h3 style="font-weight:bold">Profile Set</h3>
+        <div class="relatedContainer">  
+            <div class="relatedSetting">
+                @for(int i = 0; i < posterPaths.Count; i++)
+                {
+                    if(posterPaths[i] != null)
+                    {
+                        <div class="relateScene">
+                            <div class="relateMovie">
+                                <div class="relatedMedia" >
+                                    <img class="relatedPosterImg" src="https://image.tmdb.org/t/p/original/@posterPaths[i]" alt=""  />
+                                </div>
+                                <div class="relateInfo">
+                                    <header style="background-image: url('https://image.tmdb.org/t/p/original/@backdropPaths[i]')"></header>
+                                    <div class="relateOverview" > 
+                                        <h6>Name: </h6>@names[i] <br><br>
+                                        <h6>Characters: </h6>@characters[i] <br><br>
+                                        <h6>Overview: </h6>@overviews[i]
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                    }
+                }   
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string castID { get; set; }
+    private List<string> backdropPaths = new List<string>();
+    private List<string> posterPaths = new List<string>();
+    private List<string> names = new List<string>();
+    private List<string> characters = new List<string>();
+    private List<string> overviews = new List<string>();
+
+    private string name = "";
+    private string biography = "";
+    private string department = "";
+    private string birthday = "";
+    private int gender;
+    private string homepage = "";
+    private string placeBirth = "";
+    private string popularity = "";
+    private string profilePath = "";
+    private string imdb = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        //#if DEBUG
+        //    await Task.Delay(2000);
+        //#endif
+        await Program.fetch.GetActorDetails(castID);
+
+        backdropPaths.Clear();
+        posterPaths.Clear();
+        names.Clear();
+        characters.Clear();
+        overviews.Clear();
+
+        foreach(TvCast tvCast in Program.tvCreditSet.cast)
+        {
+            backdropPaths.Add(tvCast.backdrop_path);
+            posterPaths.Add(tvCast.poster_path);
+            names.Add(tvCast.name);
+            characters.Add(tvCast.character);
+            overviews.Add(tvCast.overview);
+        }
+
+        name = Program.actor.name;
+        biography = Program.actor.biography;
+        department = Program.actor.known_for_department;
+        birthday = Program.actor.birthday;
+        gender = Program.actor.gender;
+        if (Program.actor.homepage != null)
+            homepage = Program.actor.homepage.ToString();
+        placeBirth = Program.actor.place_of_birth;
+        popularity = Program.actor.popularity.ToString();
+        profilePath = Program.actor.profile_path;
+        imdb = Program.actor.imdb_id;
+    } // OnParametersSetAsync
+
+}

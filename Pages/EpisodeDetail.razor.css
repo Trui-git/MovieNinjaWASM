@@ -1,0 +1,119 @@
+/*************************************
+CSS setting for EpisodeDetail
+*************************************/
+.episodeDetailContainer{
+    width: 100%;
+    height: 250px;
+    margin-top: 30px;
+    min-width: 500px;
+}
+
+.episodeDetailPoster { 
+    float: left;
+    height: 200px;
+    width: 320px;    
+    /*margin: 20px;*/
+    margin-top: 50px;
+    border-radius: 6px;
+    box-shadow: -2px -2px 7px 0 rgba(99, 99, 99, 0.55), 4px 4px 9px 0 rgba(0, 0, 0, 0.83);
+}
+
+.episodeDetailInfo {
+    float: left;
+    /* color: #ecf0f1; */
+    padding: 0px 20px 0px 40px;
+    width: calc(100% - 370px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 250px;
+    min-width: 200px;
+    margin-top: 50px;
+}
+
+.episodeDetailTitle {
+    margin: 50px 30px 30px 30px;
+}
+
+.episodeDetailCrewGuest {
+    float: left;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+/*** cast div config ***/
+.castScene {
+    width: 138px;
+    height: 175px;
+    margin: 10px;
+    -webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+    perspective: 1000px;
+}
+
+.castMovie {
+    width: 138px;
+    height: 175px;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: translateZ(-110px);
+    -moz-transform: translateZ(-110px);
+    transform: translateZ(-110px);
+    -webkit-transition: -webkit-transform 350ms;
+    -moz-transition: -moz-transform 350ms;
+    transition: transform 350ms;
+}
+
+.castMovie:hover {
+    -webkit-transform: rotateY(-78deg) translateZ(20px);
+    -moz-transform: rotateY(-78deg) translateZ(20px);
+    transform: rotateY(-78deg) translateZ(20px);
+}
+
+/*Transform and style the two planes*/
+.castMovie .castPics, 
+.castMovie .castInfo {
+    position: absolute;
+    width: 138px;
+    height: 175px;
+    background-color: #fff;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 6px;
+    box-shadow: -2px -2px 7px 0 rgba(99, 99, 99, 0.55), 4px 4px 9px 0 rgba(0, 0, 0, 0.83);
+}
+
+.castMovie .castPics  {
+    -webkit-transform: translateZ(70px);
+    -moz-transform: translateZ(70px);
+    transform: translateZ(70px);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.castMovie .castInfo {
+    -webkit-transform: rotateY(90deg) translateZ(70px);
+    -moz-transform: rotateY(90deg) translateZ(70px);
+    transform: rotateY(90deg) translateZ(70px);
+    border: 1px solid #B8B5B5;
+    font-size: 0.75em;
+}
+
+.castInfo .character {
+    padding: 1.2em 1.4em;
+    margin: 2px 0 0;
+    font-weight: 700;
+    color: #666;
+    line-height: 1.4em;
+    height: 165px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.castMovie .castPics,
+.castMovie .castInfo {
+    -webkit-transition: box-shadow 350ms;
+    -moz-transition: box-shadow 350ms;
+    transition: box-shadow 350ms;
+}

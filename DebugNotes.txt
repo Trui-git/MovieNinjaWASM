@@ -1,0 +1,36 @@
+Version info:
+VSCode Version: 1.53.0-insider (user setup)
+Node.js: 12.18.3
+dotnet core version: 5.0.101
+
+create client side webassambly:
+https://softchris.github.io/pages/dotnet-blazor.html#components
+dotnet new blazorwasm -o myProject
+
+
+Debug Blazor client side webassambly in Vscode:
+https://docs.microsoft.com/en-us/aspnet/core/blazor/debug?view=aspnetcore-5.0&tabs=visual-studio-code
+
+1. make sure there is no special charactor in you working path.(not required with blazorserver)
+
+2. Enable debugging
+make sure you have this JSON statement in launchSettings.json(profiles section and myProject section)
+"inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}"
+
+3. install extension "C# for Visual Studio Code extension" for Vscode
+
+4. install "JavaScript Debugger Extension" for Vscode
+ and make sure in your Vscode setting.json this option is enabled: 
+ Debug > JavaScript: Use Preview is checked. 
+
+5. make sure the http side is secure (debug port https://localhost:5001 must have a "lock" symbol to see)
+https://www.hanselman.com/blog/developing-locally-with-aspnet-core-under-https-ssl-and-selfsigned-certs
+dotnet dev-certs https --clean
+dotnet dev-certs https --trust
+
+
+Follow this website: https://dev.to/ramhemasri/hosting-blazor-on-netlify-using-github-actions-part-3-of-series-3939
+Netlifly ID:
+Admin URL: https://app.netlify.com/sites/TvNinjaWASM
+URL:       https://TvNinjaWASM.netlify.app
+Site ID:   f5210475-fe8a-4f48-8995-5e9d7b62f2dd

@@ -1,0 +1,180 @@
+@page "/SeasonDetail/{MovieID}/{seasonNum}"
+@{
+    <div class="episodeDetails">  
+
+        @if( seasonPosterPath != null)
+        {
+            <div class="seasonPoster"
+                style= "background: url('https://image.tmdb.org/t/p/original/@seasonPosterPath');background-size: 100% 100%;">
+            </div>
+        }
+        <div class="seasonInfo">
+            <h2>@seasonName</h2>
+            <p>Rating: @seasonVote  &nbsp;&nbsp; Total Seasons: @seasonNumber  &nbsp;&nbsp; Total Episodes: @episodeNumbers.Count</p>  
+            <p>Seasons: @seasonNum </p>  
+            <p>Episodes: @episodeNumber</p>
+            <p>First Air Date: @seasonAirDate</p>
+            <br>
+            <h4>Overview: </h4>
+            <p>@seasonOverview</p>
+        </div >      
+    </div>
+
+   
+    <div class="episodeContainer">  
+        <h3> Episodes </h3>
+        <div class="episodeSetting">
+            @for( int i = 0; i < episodePosterURLs.Count; i++ )
+            {
+                if(episodePosterURLs[i] != null) 
+                {
+                    <a href="/EpisodeDetail/@MovieID/@seasonNum/@episodeNumbers[i]" title="@episodeNames[i]">
+                        <div class="episodePoster">
+                            <div class="posterMedia" >
+                                <img class="episodePosterImg" src="https://image.tmdb.org/t/p/original/@episodePosterURLs[i]" alt=""  />
+                            </div>
+                            <button id="imageButton" 
+                                type="submit" 
+                                name="episodeNum" 
+                                value=@episodeNumbers[i]>
+                            </button>
+                            <h5>Episode @episodeNumbers[i] </h5>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+    </div>
+
+
+    <div class="container-fluid" style="width: 100%; margin-bottom: 30px;">
+        <h3> Series Cast </h3>
+        <div class="row">
+            @for (int i = 0; i < castProfilePath.Count; i++) 
+            {
+                if (castProfilePath[i] != null)
+                {
+                    <div class="col" style="min-width:150px;">
+                        <div class="castScene">
+                            <div class="castMovie">
+                                <a href="/ActorDetail/@castIDs[i]">                                    
+                                    <div class="castPics"                                                 
+                                        style="background: url('https://image.tmdb.org/t/p/original/@castProfilePath[i]');background-size: 100% 100%;"> 
+                                    </div>                                       
+                                    <div class="castInfo">
+                                        <div class="character" > 
+                                            <h6>Name:</h6> @castName[i] <br> <br>
+                                            <h6>Character:</h6> @castCharacter[i] <br> <br>
+                                            <h6>Original Name:</h6> @castOriginalName[i] <br> <br>
+                                            <h6>Department:</h6> @castDepartment[i]
+                                        </div>
+                                    </div>                                  
+                                </a>                                 
+                            </div>
+                        </div>
+                    </div>   
+                }   
+            } 
+        </div>
+    </div>
+}
+
+@code {
+    /* Paramters received from other page */
+    [Parameter]
+    public string MovieID { get; set; }
+    [Parameter]
+    public string seasonNum { get; set; }
+    /* Episode Info */
+    private List<string> episodePosterURLs = new List<string>();
+    private List<string> episodeOverviews = new List<string>();
+    private List<string> episodeIDs = new List<string>();
+    private List<string> episodeNumbers = new List<string>();
+    private List<string> episodeNames = new List<string>();
+        
+    /* Cast and Crew Info */
+    private List<string> castProfilePath = new List<string>();
+    private List<string> crewProfilePath = new List<string>();
+    private List<string> castIDs = new List<string>();
+    private List<string> crewIDs = new List<string>();   
+    private List<string> castName = new List<string>();
+    private List<string> crewName = new List<string>();
+    private List<string> castOriginalName = new List<string>();
+    private List<string> crewOriginalName = new List<string>();
+    private List<string> castCharacter = new List<string>();
+    private List<string> crewCharacter = new List<string>();
+    private List<string> castDepartment = new List<string>();
+    private List<string> crewDepartment = new List<string>();   
+
+    /* Season Info */
+    private string seasonOverview = "";
+    private string seasonAirDate = "";
+    private string seasonPosterPath = "";
+    private string seasonNumber = ""; 
+    private string episodeNumber="";
+    private string seasonVote = "";
+    private string seasonName = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        //#if DEBUG
+        //    await Task.Delay(2000);
+        //#endif
+        await Program.fetch.GetSeasonDetails(MovieID, seasonNum);
+        episodePosterURLs.Clear();
+        episodeOverviews.Clear();
+        episodeIDs.Clear();
+        episodeNumbers.Clear();
+        episodeNames.Clear();
+        castProfilePath.Clear();
+        crewProfilePath.Clear();
+        castIDs.Clear();
+        crewIDs.Clear();
+        castName.Clear();
+        crewName.Clear();
+        castOriginalName.Clear();
+        crewOriginalName.Clear();
+        castCharacter.Clear();
+        crewCharacter.Clear();
+        castDepartment.Clear();
+        crewDepartment.Clear();
+
+        foreach(SeaonCast cast in Program.seasonCreditSet.cast)
+        {
+            castProfilePath.Add(cast.profile_path);
+            castIDs.Add(cast.id.ToString());
+            castName.Add(cast.name);
+            castOriginalName.Add(cast.original_name);
+            castCharacter.Add(cast.character);
+            castDepartment.Add(cast.known_for_department);
+        }
+        foreach(SeaonCrew crew in Program.seasonCreditSet.crew)
+        {
+            crewProfilePath.Add(crew.profile_path);
+            crewIDs.Add(crew.id.ToString());
+            crewName.Add(crew.name);
+            crewOriginalName.Add(crew.original_name);
+            crewDepartment.Add(crew.known_for_department);
+        }
+
+        foreach(Episode episode in Program.seasonDetail.episodes)
+        {
+            episodePosterURLs.Add(episode.still_path);
+            episodeOverviews.Add(episode.overview);
+            episodeIDs.Add(episode.id.ToString());
+            episodeNumbers.Add(episode.episode_number.ToString());
+            episodeNames.Add(episode.name);
+        }
+
+        seasonOverview = Program.seasonDetail.overview;
+        seasonAirDate = Program.seasonDetail.air_date;
+        seasonPosterPath = Program.seasonDetail.poster_path;
+        seasonName = Program.seasonDetail.name;
+        seasonNumber = Program.tv.number_of_seasons.ToString(); 
+        episodeNumber = Program.tv.number_of_episodes.ToString();
+        seasonVote = Program.tv.vote_average.ToString();
+
+
+    } // OnParametersSetAsync
+} 
+

@@ -1,0 +1,143 @@
+@page "/EpisodeDetail/{tvID}/{seasonNum}/{episodeNum}"
+@{
+    <div class="episodeDetailContainer">
+        @if (episodePosterPath != null )
+        {
+            <div class="episodeDetailPoster"
+                style= "background: url('https://image.tmdb.org/t/p/original/@episodePosterPath');background-size: 100% 100%;">
+            </div>
+        }
+        <div class="episodeDetailInfo">
+            <h4>@episodeName</h4>
+            <p>Rating: @episodeRating &nbsp;&nbsp; Season: @seasonNum &nbsp;&nbsp; Episode: @episodeNum</p>  
+            <p>Air Date: @episodeAirDate</p>
+            <h5>Overview: </h5>
+            <p>@episodeOverview</p>
+        </div>
+    </div>   
+
+    <div class="episodeDetailCrewGuest">
+        <h3 class="episodeDetailTitle"> Crew List </h3>
+        <div class="container-fluid">
+            <div class="row">
+                @for(int i = 0; i < crewNames.Count; i ++){
+                    if (crewProfilePaths[i] != null )
+                    {
+                        <div class="col" style="min-width:150px;">
+                            <div class="castScene">
+                                <div class="castMovie">
+                                    <a href="/ActorDetail/@crewIDs[i]" title="@crewNames[i]">
+                                        <div class="castPics"                                                 
+                                            style="background: url('https://image.tmdb.org/t/p/original/@crewProfilePaths[i]');background-size: 100% 100%;"> 
+                                        </div>      
+                                        <div class="castInfo">
+                                            <div class="character" > 
+                                                <h6>Name:</h6> @crewNames[i] <br> <br>                                    
+                                                <h6>Department:</h6> @crewDepartments[i] <br> <br>
+                                                <h6>Job:</h6> @crewJobs[i]
+                                            </div>
+                                        </div>                                  
+                                    </a>                                    
+                                </div>
+                            </div>
+                        </div>    
+                    }  
+                    else 
+                    {
+                        <div class="col" style="min-width:150px;">
+                            <div class="castScene">
+                                <div class="castMovie">
+                                    <a href="/ActorDetail/@crewIDs[i]" title="@crewNames[i]">
+                                        <div class="castPics"                                                 
+                                            style="background: url('./assets/images/no_image.jpg');background-size: 100% 100%;"> 
+                                        </div>      
+                                        <div class="castInfo">
+                                            <div class="character" > 
+                                                <h6>Name:</h6> @crewNames[i]  <br> <br>                                     
+                                                <h6>Department:</h6> @crewDepartments[i] <br> <br> 
+                                                <h6>Job:</h6> @crewJobs[i]
+                                            </div>
+                                        </div>                                  
+                                    </a>                                    
+                                </div>
+                            </div>
+                        </div>    
+                    }  
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string tvID { get; set; }
+    [Parameter]
+    public string seasonNum { get; set; }
+    [Parameter]
+    public string episodeNum { get; set; }
+
+/* Cast and Crew Info */
+    private List<string> guestProfilePaths = new List<string>();
+    private List<string> crewProfilePaths = new List<string>();
+    private List<string> guestIDs = new List<string>();
+    private List<string> crewIDs = new List<string>();   
+    private List<string> guestNames = new List<string>();
+    private List<string> crewNames = new List<string>();
+    private List<string> guestOriginalNames = new List<string>();
+    private List<string> crewOriginalNames = new List<string>();
+    private List<string> guestCharacters = new List<string>();
+    private List<string> crewCharacters = new List<string>();
+    private List<string> guestDepartments = new List<string>();
+    private List<string> crewDepartments = new List<string>();   
+    private List<string> crewJobs = new List<string>();   
+    private string episodeOverview = "";
+    private string episodeAirDate = "";
+    private string episodePosterPath = "";
+    private string episodeName = "";
+    private string episodeRating = "";
+    protected override async Task OnParametersSetAsync()
+    {
+        //#if DEBUG
+        //    await Task.Delay(2000);
+        //#endif
+        await Program.fetch.GetEpisodeDetails(tvID, seasonNum, episodeNum);
+        crewProfilePaths.Clear();
+        crewIDs.Clear();
+        crewNames.Clear();
+        crewOriginalNames.Clear();
+        crewDepartments.Clear();
+        crewJobs.Clear();
+        guestProfilePaths.Clear();
+        guestIDs.Clear();
+        guestNames.Clear();
+        guestOriginalNames.Clear();
+        guestDepartments.Clear();
+
+        foreach(Crew crew in Program.episodeDetail.crew)
+        {
+            crewProfilePaths.Add(crew.profile_path);
+            crewIDs.Add(crew.id.ToString());
+            crewNames.Add(crew.name);
+            crewOriginalNames.Add(crew.original_name);
+            crewDepartments.Add(crew.known_for_department);
+            crewJobs.Add(crew.job);
+        }
+
+        foreach(GuestStar guest in Program.episodeDetail.guest_stars)
+        {
+            guestProfilePaths.Add(guest.profile_path);
+            guestIDs.Add(guest.id.ToString());
+            guestNames.Add(guest.name);
+            guestOriginalNames.Add(guest.original_name);
+            guestDepartments.Add(guest.known_for_department);
+        }
+
+        episodeOverview = Program.episodeDetail.overview;
+        episodeAirDate = Program.episodeDetail.air_date;
+        episodePosterPath = Program.episodeDetail.still_path;
+        episodeName = Program.episodeDetail.name;
+        episodeRating = Program.episodeDetail.vote_average.ToString();
+
+    } // OnParametersSetAsync
+}

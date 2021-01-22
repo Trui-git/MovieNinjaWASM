@@ -1,0 +1,19 @@
+@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="top-row px-4">
+            <span>Built using: </span>
+            <img class="logo" src="./assets/images/blazorLogo.png" alt="Blazor" title="Blazor">
+            <img class="logo" src="./assets/images/tmdbLogo.png" alt="The Movie DB" title="The Movie DB">
+        </div>
+        <SearchBox />
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>

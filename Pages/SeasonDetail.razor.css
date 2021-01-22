@@ -1,0 +1,192 @@
+
+/************************/
+/*** cast div config ***/
+/***********************/
+.castScene {
+    width: 138px;
+    height: 175px;
+    margin: 10px;
+    -webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+    perspective: 1000px;
+}
+
+.castMovie {
+    width: 138px;
+    height: 175px;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: translateZ(-110px);
+    -moz-transform: translateZ(-110px);
+    transform: translateZ(-110px);
+    -webkit-transition: -webkit-transform 350ms;
+    -moz-transition: -moz-transform 350ms;
+    transition: transform 350ms;
+}
+
+.castMovie:hover {
+    -webkit-transform: rotateY(-78deg) translateZ(20px);
+    -moz-transform: rotateY(-78deg) translateZ(20px);
+    transform: rotateY(-78deg) translateZ(20px);
+}
+
+/*Transform and style the two planes*/
+
+.castMovie .castPics, 
+.castMovie .castInfo {
+    position: absolute;
+    width: 138px;
+    height: 175px;
+    background-color: #fff;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 6px;
+    box-shadow: -2px -2px 7px 0 rgba(99, 99, 99, 0.55), 4px 4px 9px 0 rgba(0, 0, 0, 0.83);
+}
+
+.castMovie .castPics  {
+    -webkit-transform: translateZ(70px);
+    -moz-transform: translateZ(70px);
+    transform: translateZ(70px);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.castMovie .castInfo {
+    -webkit-transform: rotateY(90deg) translateZ(70px);
+    -moz-transform: rotateY(90deg) translateZ(70px);
+    transform: rotateY(90deg) translateZ(70px);
+    border: 1px solid #B8B5B5;
+    font-size: 0.75em;
+}
+
+.castInfo .character {
+    padding: 1.2em 1.4em;
+    margin: 2px 0 0;
+    font-weight: 700;
+    color: #666;
+    line-height: 1.4em;
+    height: 165px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.castMovie .castPics,
+.castMovie .castInfo {
+    -webkit-transition: box-shadow 350ms;
+    -moz-transition: box-shadow 350ms;
+    transition: box-shadow 350ms;
+}
+
+/************************************
+    CSS section for episodes.html 
+ ***********************************/ 
+.episodeContainer {
+    width: 100%;
+    overflow: auto;
+    overflow-y: hidden;
+    margin-top: 70px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.episodeSetting {
+    transition: 450ms -webkit-transform;
+    transition: 450ms transform;
+    transition: 450ms transform, 450ms -webkit-transform;
+    font-size: 0;
+    white-space: nowrap;
+    /* margin: 70px 0; */
+    padding-bottom: 10px;
+    margin-top: 30px;
+}
+
+/***original image 1920*1080********
+***shrink to 0.75 times to 144*81***/
+.episodePoster {
+    position: relative;
+    width: 144px;
+    height: 100px;
+    cursor: pointer;
+    transition: 450ms all;
+    margin: auto;
+    margin-bottom: 30px;
+    float: left;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.episodePosterImg {
+    margin: auto;
+    width: 144px;
+    height: 81px;
+    -moz-object-fit: cover;
+    -webkit-object-fit: cover;
+            object-fit: cover;
+    border-radius: 6px;
+    box-shadow: -2px -2px 7px 0 rgba(99, 99, 99, 0.55), 4px 4px 9px 0 rgba(0, 0, 0, 0.83);
+}
+
+.episodeSetting:hover .episodePoster {
+    opacity: 0.3;
+}
+
+.episodeSetting:hover .episodePoster:hover {
+    -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+    opacity: 1;
+}
+
+/* put this button over poster */
+#imageButton {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    border: 0;
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5;
+}
+
+.episodePoster > h5 {
+    font-size: 14px;
+    color: darkslategray;;
+    text-align: center;
+    margin-top: 5px
+}
+
+/********************
+** Episode Details **
+*********************/
+.episodeDetails {
+    width: 100%;
+    min-width: 280px;
+    height: 450px;
+}
+
+.seasonPoster { 
+    float: left;
+    height: 450px;
+    width: 300px;    
+    margin-top: 30px;
+    border-radius: 6px;
+    box-shadow: -2px -2px 7px 0 rgba(99, 99, 99, 0.55), 4px 4px 9px 0 rgba(0, 0, 0, 0.83);
+}
+
+.seasonInfo {
+    float: left;
+    color: darkslategray;;
+    padding: 40px;
+    padding-top: 0px;
+    width: calc(100% - 300px);    
+    height: 450px;
+    overflow: auto;
+    overflow-x: hidden;
+    margin-top: 30px;
+    min-width: 250px;
+}
+

@@ -1,0 +1,42 @@
+/* Search Box and form */
+.searchBtn {
+  height: 35px;
+  width: 35px;
+  padding: .375rem .175rem;
+  border: 1px solid #000;
+  border-style: none;
+  box-shadow: 2px 2px 5px rgba(0,0,0,.21);
+  }
+  .searchBtn:hover {
+  border: 2px solid #000;
+  }
+  #searchForm {
+      width: 40%;
+      margin: 0 auto;
+      margin-top: 20px;
+      min-width: 350px;
+  }
+  #searchBox {
+      width: calc(100% - 144px);
+      padding: 6px 21px;
+      border: 1px solid #000;
+      font-weight: 700;
+      background-size: contain;
+      background-position: right;
+      background-repeat: no-repeat; 
+      border-radius: .25rem;
+      color: #333;
+      box-shadow: 2px 2px 5px rgba(0,0,0,.21);
+      vertical-align: middle;
+      margin: 0 7px;
+      border-style: none;
+  }
+  #searchForm > input[type="submit"] {
+      background: rgb(134, 192, 80);
+      color: #fff;
+      font-weight: 500;
+      font-size: 1.2em;
+      width: 90px;
+      height: 52px;
+      border-radius: 8px;
+  }
